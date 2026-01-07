@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id        Int      @id @default(autoincrement())
+  matricula String   @unique
+  marca     String
+  modelo    String
+  pais      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ultimoKilometraje Int? 
+  proximoService    Int? 
+  owner     Owner?
+  services  Service[]
+  notes     Note[]
+  
+  @@map("vehicles")
+}
+
+model Owner {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  telefono   String
+  email      String?
+  createdAt  DateTime @default(now())
+  
+  vehicleId  Int      @unique
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  @@map("owners")
+}
+
+model Service {
+  id        Int      @id @default(autoincrement())
+  fecha     DateTime
+  taller    String
+  descripcion String
+  repuestos String?
+  costo     Float?
+  createdAt DateTime @default(now())
+  
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  @@map("services")
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  contenido String
+  fecha     DateTime @default(now())
+  
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  @@map("notes")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user") // admin, user, premium
+  plan      String   @default("free") // free, verified, premium
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Si quieres que los talleres tengan sus propios datos
+  taller    Taller?
+
+  @@map("users")
+}
+
+model Taller {
+  id          String   @id @default(cuid())
+  nombre      String
+  contacto    String?
+  telefono    String?
+  direccion   String?
+  email       String?
+  logo        String?
+  descripcion String?
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("talleres")
+}
