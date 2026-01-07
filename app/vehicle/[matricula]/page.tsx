@@ -51,6 +51,7 @@ export default function VehicleDetail() {
 
   useEffect(() => {
     fetchVehicle();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matricula]);
 
   const fetchVehicle = async () => {

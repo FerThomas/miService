@@ -163,7 +163,7 @@ export default function DashboardPage() {
 
 // Componente de Estadísticas
 function EstadisticasTab({
-  session,
+  
   tallerData,
 }: {
   session: any;

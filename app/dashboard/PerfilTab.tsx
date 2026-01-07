@@ -21,7 +21,7 @@ interface TallerData {
   logo?: string
 }
 
-export default function PerfilTab({ session, tallerData, onUpdate }: PerfilTabProps) {
+export default function PerfilTab({  tallerData, onUpdate }: PerfilTabProps) {
   const { update } = useSession()
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -76,7 +76,7 @@ export default function PerfilTab({ session, tallerData, onUpdate }: PerfilTabPr
         setError(data.error || 'Error al actualizar el perfil')
       }
     } catch (error) {
-      setError('Error de conexión')
+      setError(`Error de conexión ${error}`)
     } finally {
       setSaving(false)
     }

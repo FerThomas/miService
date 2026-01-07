@@ -2,7 +2,7 @@ import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./db";
 import bcrypt from "bcryptjs";
-import { Taller } from "../types/taller";
+//import { Taller } from "../types/taller";
 
 export const authOptions: AuthOptions = {
   providers: [

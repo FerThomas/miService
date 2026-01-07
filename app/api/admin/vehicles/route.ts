@@ -5,6 +5,7 @@ import { prisma } from '../../../../lib/db'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log(request)
     const session = await getServerSession(authOptions)
 
     // Verificar si es admin
@@ -15,8 +16,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // 🔥 **AQUÍ ESTÁ LA MAGIA DE PRISMA** 🔥
-    // Obtener todos los vehículos con sus dueños
     const vehicles = await prisma.vehicle.findMany({
       include: {
         owner: true, // Incluir datos del dueño

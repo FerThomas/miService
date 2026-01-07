@@ -5,6 +5,7 @@ import { prisma } from '../../../../lib/db'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log(request)
     const session = await getServerSession(authOptions)
 
     // Verificar si es admin

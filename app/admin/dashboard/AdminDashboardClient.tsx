@@ -269,7 +269,7 @@ function VehiclesTab({ vehicles }: { vehicles: any[] }) {
         setError("Error al buscar la matrícula");
       }
     } catch (error) {
-      setError("Error de conexión");
+      setError(`Error de conexión: ${error}`);
     }
   };
 
@@ -1019,7 +1019,7 @@ function AddTallerTab() {
         setError(data.error || 'Error al crear el taller');
       }
     } catch (error) {
-      setError('Error de conexión');
+      setError(`Error de conexión:${error}`);
     } finally {
       setLoading(false);
     }
