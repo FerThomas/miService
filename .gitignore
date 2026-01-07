@@ -19,7 +19,7 @@
 
 # production
 /build
-
+prisma/seed.ts
 # misc
 .DS_Store
 *.pem
