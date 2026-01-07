@@ -3,12 +3,13 @@ import { prisma } from 'lib/db'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ matricula: string }> }
+  context: any
 ) {
   try {
-    const { matricula } = await params
+    const { matricula } = await context.params
+
     const vehicle = await prisma.vehicle.findUnique({
-      where: { matricula: matricula },
+      where: { matricula },
       include: {
         owner: true,
         services: {
