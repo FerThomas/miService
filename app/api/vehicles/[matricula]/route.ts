@@ -3,7 +3,7 @@ import { prisma } from 'lib/db'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { matricula: string } }
+  { params }: { params: Promise<{ matricula: string }> }
 ) {
   try {
     const { matricula } = await params
