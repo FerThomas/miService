@@ -11,7 +11,7 @@ declare module "next-auth" {
       taller?: {
         id: string;
         nombre: string;
-        contacto?: string;
+        contacto: string | null;
         telefono?: string;
         direccion?: string;
         email?: string;
@@ -30,7 +30,7 @@ declare module "next-auth" {
     taller?: {
       id: string;
       nombre: string;
-      contacto: string;
+      contacto: string | null
       telefono?: string;
       direccion?: string;
       email?: string;
@@ -47,7 +47,7 @@ declare module "next-auth/jwt" {
     taller?: {
       id: string;
       nombre: string;
-      contacto?: string;
+      contacto: string | null;
       telefono?: string;
       direccion?: string;
       email?: string;
