@@ -4,6 +4,8 @@ import "./globals.css";
 import { SessionProvider } from "../components/SessionProvider";
 import { getServerSession } from "next-auth";
 import Navbar from "components/NavBar";
+import { Suspense } from 'react'
+import LoadingSession from "components/LoadingSession";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +24,10 @@ export default async function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <SessionProvider session={session}>
+          <Suspense fallback={<LoadingSession />}>
           <Navbar />
-          {children}
+            {children}
+          </Suspense>          
         </SessionProvider>
       </body>
     </html>

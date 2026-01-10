@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface Vehicle {
   id: number;
@@ -32,12 +33,14 @@ interface Vehicle {
 }
 
 export default function VehicleDetail() {
+  
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const { data: session } = useSession();
   const [serviceForm, setServiceForm] = useState({
     fecha: new Date().toISOString().split("T")[0],
-    taller: "",
+    taller: session?.user?.taller?.nombre.toString(),
     descripcion: "",
     repuestos: "",
     costo: "",
@@ -51,7 +54,7 @@ export default function VehicleDetail() {
 
   useEffect(() => {
     fetchVehicle();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matricula]);
 
   const fetchVehicle = async () => {
@@ -88,7 +91,7 @@ export default function VehicleDetail() {
         setShowModal(false);
         setServiceForm({
           fecha: new Date().toISOString().split("T")[0],
-          taller: "",
+          taller: session?.user?.taller?.nombre.toString(),
           descripcion: "",
           repuestos: "",
           costo: "",
@@ -180,7 +183,7 @@ export default function VehicleDetail() {
                       : "bg-green-50"
                   }`}
                 >
-                  <p className="text-sm font-medium">Próximo Service</p>
+                  <p className="text-sm font-medium text-gray-700">Próximo Service</p>
                   <p
                     className={`text-lg font-bold ${
                       vehicle.ultimoKilometraje &&
@@ -192,7 +195,7 @@ export default function VehicleDetail() {
                     {vehicle.proximoService.toLocaleString()} km
                   </p>
                   {vehicle.ultimoKilometraje && vehicle.proximoService && (
-                    <p className="text-xs mt-1">
+                    <p className="text-xs mt-1 text-gray-700">
                       {vehicle.ultimoKilometraje >= vehicle.proximoService
                         ? "⚠️ Service vencido"
                         : `Faltan ${(
@@ -204,12 +207,14 @@ export default function VehicleDetail() {
               )}
             </div>
             <div className="flex gap-3">
-              <button
-                onClick={() => setShowModal(true)}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              >
-                Agregar Service
-              </button>
+              {session && (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                >
+                  Agregar Service
+                </button>
+              )}
               <button
                 onClick={() => router.back()}
                 className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
@@ -324,14 +329,13 @@ export default function VehicleDetail() {
         </div>
 
         {/* Modal para agregar service */}
-        {showModal && (
+        {showModal && (          
           <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 text-gray-500">
             <div className="bg-white rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-4">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
                   Agregar Nuevo Service
                 </h2>
-
                 <form onSubmit={handleSubmitService} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -357,8 +361,11 @@ export default function VehicleDetail() {
                       value={serviceForm.taller}
                       onChange={handleChange}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Nombre del taller"
+                      readOnly
+                      className="placeholder-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 cursor-not-allowed focus:outline-none"
+                      placeholder={
+                        session?.user?.taller?.nombre || "No se encontró taller"
+                      }
                     />
                   </div>
 

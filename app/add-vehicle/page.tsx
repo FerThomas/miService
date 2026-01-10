@@ -125,6 +125,12 @@ export default function AddVehicle() {
           >
             Iniciar Sesión
           </button>
+          <button
+              onClick={() => router.push("/")}
+              className="ml-2 bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700"
+            >
+              Volver al Inicio
+            </button>
         </div>
       </div>
     );

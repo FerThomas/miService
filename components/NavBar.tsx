@@ -1,7 +1,14 @@
 "use client";
 
-import { CircleUserRound, UserRoundCog, Menu, X,ShieldUser } from "lucide-react";
+import {
+  CircleUserRound,
+  UserRoundCog,
+  Menu,
+  X,
+  ShieldUser,
+} from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -9,7 +16,7 @@ import { useState } from "react";
 export default function Navbar() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const pathname = usePathname();
   return (
     <nav className="bg-blue-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,7 +24,13 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" aria-label="Inicio">
-              <Image src="/logo.png" alt="MiService logo" width={300} height={80} className="p-6 mt-1"/>
+              <Image
+                src="/logo.png"
+                alt="MiService logo"
+                width={300}
+                height={80}
+                className="p-6 mt-1"
+              />
             </Link>
           </div>
 
@@ -31,7 +44,7 @@ export default function Navbar() {
                   title="Dashboard"
                 >
                   <CircleUserRound size={20} />
-                </Link>                
+                </Link>
                 {session?.user?.role === "admin" && (
                   <Link
                     href="/admin/dashboard"
@@ -40,7 +53,9 @@ export default function Navbar() {
                     <ShieldUser />
                   </Link>
                 )}
-                <span className="hidden lg:inline">Hola, {session.user?.name}</span>
+                <span className="hidden lg:inline">
+                  Hola, {session.user?.name}
+                </span>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
                   className="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md"
@@ -50,7 +65,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link
-                href="/auth/login"
+                href={`/auth/login?callbackUrl=${encodeURIComponent(pathname)}`}
                 className="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md"
               >
                 Login
@@ -78,7 +93,7 @@ export default function Navbar() {
                   <CircleUserRound size={16} />
                   <span>Hola, {session.user?.name}</span>
                 </div>
-                
+
                 <Link
                   href="/dashboard"
                   className="text-white hover:text-blue-200 flex items-center gap-2 py-2"
@@ -87,7 +102,7 @@ export default function Navbar() {
                   <CircleUserRound size={18} />
                   Dashboard
                 </Link>
-                
+
                 <Link
                   href="/dashboard/perfil"
                   className="text-white hover:text-blue-200 flex items-center gap-2 py-2"
@@ -96,7 +111,7 @@ export default function Navbar() {
                   <UserRoundCog size={18} />
                   Perfil
                 </Link>
-                
+
                 {session?.user?.role === "admin" && (
                   <Link
                     href="/admin/dashboard"
@@ -106,7 +121,7 @@ export default function Navbar() {
                     Administración
                   </Link>
                 )}
-                
+
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
